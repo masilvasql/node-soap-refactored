@@ -1,9 +1,9 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
-    "moduleResolution": "nodenext",
+    "target": "ES2015",
+    "module": "CommonJS",
+    "moduleResolution": "NodeNext",
     "outDir": "lib",
     "sourceMap": true,
     "declaration": true,
