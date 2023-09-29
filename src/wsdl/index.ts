@@ -637,6 +637,17 @@ export class WSDL {
   public objectToXML(obj, name: string, nsPrefix: any, nsURI: string, isFirst?: boolean, xmlnsAttr?, schemaObject?, nsContext?: NamespaceContext) {
     const schema = this.definitions.schemas[nsURI];
 
+    if(this.options.overrideElementKey && Object.keys(this.options.overrideElementKey).length > 0) {
+      for (let key in this.options.overrideElementKey) {
+        const overrideKey = this.options.overrideElementKey[key];
+        if (obj && obj[key]) {
+          Object.defineProperty(obj, overrideKey,
+              Object.getOwnPropertyDescriptor(obj, key));
+          delete obj[key];
+        }
+      }
+    }
+
     let parentNsPrefix = nsPrefix ? nsPrefix.parent : undefined;
     if (typeof parentNsPrefix !== 'undefined') {
       // we got the parentNsPrefix for our array. setting the namespace-variable back to the current namespace string
@@ -1175,6 +1186,9 @@ export class WSDL {
     this.options.forceSoap12Headers = options.forceSoap12Headers;
     this.options.customDeserializer = options.customDeserializer;
 
+    if(options.overrideElementKey !== undefined) {
+      this.options.overrideElementKey = options.overrideElementKey;
+    }
     if (options.overrideRootElement !== undefined) {
       this.options.overrideRootElement = options.overrideRootElement;
     }
@@ -1399,12 +1413,7 @@ export function open_wsdl(uri: any, p2: WSDLCallback | IOptions, p3?: WSDLCallba
   const request_options = options.wsdl_options;
 
   let wsdl: WSDL;
-  if (/^\<\?xml[^>]*?>/i.test(uri)) {
-    wsdl = new WSDL(uri, uri, options);
-    WSDL_CACHE[uri] = wsdl;
-    wsdl.WSDL_CACHE = WSDL_CACHE;
-    wsdl.onReady(callback);
-  } else if (!/^https?:/i.test(uri)) {
+  if (!/^https?:/i.test(uri)) {
     debug('Reading file: %s', uri);
     fs.readFile(uri, 'utf8', (err, definition) => {
       if (err) {

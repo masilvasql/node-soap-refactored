@@ -24,10 +24,6 @@ module.exports = function createSocketStream(file, length) {
   socketStream.destroy = function() {
   };
 
-  // axios calls this
-  socketStream.setKeepAlive = function() {
-  };
-
   socketStream.req = httpReqStream;
   socketStream.res = httpResStream;
 

@@ -6,4 +6,3 @@ export * from './ClientSSLSecurityPFX';
 export * from './NTLMSecurity';
 export * from './WSSecurity';
 export * from './WSSecurityCert';
-export * from './WSSecurityPlusCert';

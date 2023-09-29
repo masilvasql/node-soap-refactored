@@ -188,6 +188,10 @@ export class Client extends EventEmitter {
         }
       }
     }
+
+    if(options.overrideElementKey !== undefined) {
+      this.wsdl.options.overrideElementKey = options.overrideElementKey;
+    }
     if (options.overrideRootElement !== undefined) {
       this.wsdl.options.overrideRootElement = options.overrideRootElement;
     }
@@ -443,6 +447,7 @@ export class Client extends EventEmitter {
       ) +
       '<' + envelopeKey + ':Body' +
       (this.bodyAttributes ? this.bodyAttributes.join(' ') : '') +
+      (this.security && this.security.postProcess ? ' Id="_0"' : '') +
       '>' +
       message +
       '</' + envelopeKey + ':Body>' +
